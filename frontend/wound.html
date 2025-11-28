@@ -14,7 +14,14 @@
 
 <div class="center-box">
 
-    <input type="file" id="woundImage" accept="image/*">
+    <div id="woundPreview" class="preview-box"></div>
+
+    <input 
+        type="file" 
+        id="woundImage" 
+        accept="image/*"
+        onchange="previewImage('woundImage', 'woundPreview')"
+    >
 
     <button onclick="predictWound()">Predict Wound</button>
 
