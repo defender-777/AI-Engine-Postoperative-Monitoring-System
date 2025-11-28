@@ -14,7 +14,15 @@
 
 <div class="center-box">
 
-    <input type="file" id="riskImage" accept="image/*">
+    <!-- Image preview -->
+    <div id="riskPreview" class="preview-box"></div>
+
+    <input 
+        type="file" 
+        id="riskImage" 
+        accept="image/*"
+        onchange="previewImage('riskImage', 'riskPreview')"
+    >
 
     <input id="riskHr" type="number" placeholder="Heart Rate (HR)">
     <input id="riskTemp" type="number" placeholder="Temperature (°C)">
