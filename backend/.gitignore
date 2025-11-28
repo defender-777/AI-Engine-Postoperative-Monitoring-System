@@ -1,0 +1,37 @@
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Model checkpoints (optional)
+*.ckpt
+checkpoint/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python environment artifacts
+pip-selfcheck.json
+pyvenv.cfg
+
+# Database or uploads (optional)
+uploads/
