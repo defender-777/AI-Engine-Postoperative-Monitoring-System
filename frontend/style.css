@@ -111,3 +111,16 @@ h2 {
     color: #cc0000;
     font-weight: bold;
 }
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dash-table th, .dash-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+.dash-table th {
+    background-color: #f5faff;
+}
