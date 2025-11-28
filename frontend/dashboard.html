@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<a href="index.html" class="back-btn">⬅ Back</a>
+<h1 class="title">Doctor Dashboard 🩺</h1>
+
+<div class="center-box">
+
+    <table class="dash-table">
+        <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Risk Level</th>
+        </tr>
+        </thead>
+
+        <tbody id="patientList">
+        <!-- Auto-filled later -->
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+let patients = [
+    { name: "Ravi Kumar", risk: 0.12 },
+    { name: "Sanjana P", risk: 0.48 },
+    { name: "Rahul Singh", risk: 0.82 },
+    { name: "Megha S", risk: 0.31 },
+];
+
+function loadDashboard() {
+    let html = "";
+    patients.forEach(p => {
+        let color = p.risk < 0.35 ? "green" : p.risk < 0.7 ? "yellow" : "red";
+        let label = p.risk < 0.35 ? "Low" : p.risk < 0.7 ? "Medium" : "High";
+
+        html += `
+            <tr>
+                <td>${p.name}</td>
+                <td><span class="${color}">${label} (${p.risk.toFixed(2)})</span></td>
+            </tr>
+        `;
+    });
+
+    document.getElementById("patientList").innerHTML = html;
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>
