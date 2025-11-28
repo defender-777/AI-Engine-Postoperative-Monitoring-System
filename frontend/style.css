@@ -73,3 +73,41 @@ h2 {
 .back-btn:hover {
     text-decoration: underline;
 }
+/* Image preview box */
+.preview-box {
+    margin: 15px 0;
+    text-align: center;
+}
+.preview-box img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Loading animation */
+.loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* Color-coded results */
+.green {
+    color: #008000;
+    font-weight: bold;
+}
+.yellow {
+    color: #d4aa00;
+    font-weight: bold;
+}
+.red {
+    color: #cc0000;
+    font-weight: bold;
+}
