@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analytics Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<a href="index.html" class="back-btn">⬅ Back</a>
+<h1 class="title">Analytics Dashboard 📊</h1>
+
+<div class="center-box">
+    <canvas id="riskChart"></canvas>
+</div>
+
+<script>
+const ctx = document.getElementById('riskChart');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Healthy', 'Mild Infection', 'Severe Infection'],
+    datasets: [{
+      label: 'Case Count',
+      data: [12, 31, 9],
+      backgroundColor: ['green', 'yellow', 'red']
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
