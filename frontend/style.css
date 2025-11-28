@@ -38,3 +38,38 @@ h2 {
     margin-top: 0;
     color: #003d99;
 }
+.center-box {
+    width: 350px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.center-box input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.output {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f1f8ff;
+    border-radius: 8px;
+    font-size: 18px;
+    color: #003d99;
+}
+
+.back-btn {
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #0066cc;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
