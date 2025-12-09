@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
 from ml.infer_wound import wound_model
 
-router = APIRouter()
+router = APIRouter(prefix="/wound")
 
 @router.post("/predict")
 async def predict_wound(file: UploadFile = File(...)):

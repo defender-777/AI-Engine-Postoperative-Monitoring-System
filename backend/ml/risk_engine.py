@@ -30,7 +30,7 @@ def compute_full_risk(wound_pred, vitals_alerts):
     ] + vitals_alerts
 
     return {
-        "risk_score": score,
+        "risk_score": float(score),
         "risk_level": level,
         "reasons": reasons,
         "explanation": " | ".join(reasons)

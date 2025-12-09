@@ -34,31 +34,42 @@ async function predictWound() {
 
     showLoader("result");
 
-    let form = new FormData();
-    form.append("file", fileInput.files[0]);
+    try {
+        let form = new FormData();
+        form.append("file", fileInput.files[0]);
 
-    let res = await fetch(`${BASE_URL}/wound/predict`, {
-        method: "POST",
-        body: form
-    });
+        let res = await fetch(`${BASE_URL}/wound/predict`, {
+            method: "POST",
+            body: form
+        });
 
-    let data = await res.json();
+        if (!res.ok) throw new Error("API Error: " + res.status);
 
-    let label = data.wound_prediction.label;
-    let confidence = (data.wound_prediction.confidence * 100).toFixed(2);
+        let data = await res.json();
 
-    let color =
-        label === "healthy" ? "green" :
-        label === "mild_infection" ? "yellow" :
-        "red";
+        if (!data.wound_prediction) throw new Error("Invalid response");
 
-    document.getElementById("result").innerHTML = `
-        <h3 class="${color}">${label} (${confidence}%)</h3>
-    `;
+        let label = data.wound_prediction.label;
+        let confidence = (data.wound_prediction.confidence * 100).toFixed(2);
+
+        let color =
+            label === "healthy" ? "green" :
+            label === "mild_infection" ? "yellow" :
+            "red";
+
+        document.getElementById("result").innerHTML = `
+            <h3 class="${color}">${label} (${confidence}%)</h3>
+        `;
+    } catch (err) {
+        document.getElementById("result").innerHTML =
+            `<p class="red">ERROR: ${err.message}</p>`;
+        console.error(err);
+    }
 }
 
 /* ------------------------------------------------------
    2) Vitals Abnormality Check
+   (JS sends hr/temp/spo2 to match backend)
 ---------------------------------------------------------*/
 async function checkVitals() {
     let hr = document.getElementById("hr").value;
@@ -73,28 +84,46 @@ async function checkVitals() {
         spo2: Number(spo2)
     };
 
-    let res = await fetch(`${BASE_URL}/vitals/check`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-    });
+    try {
+        let res = await fetch(`${BASE_URL}/vitals/check`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
 
-    let data = await res.json();
+        if (!res.ok) throw new Error("API Error: " + res.status);
 
-    if (data.alerts.length === 0) {
+        let data = await res.json();
+
+        if (!data.alerts) throw new Error("Invalid response from backend");
+
+        let alerts = data.alerts;
+
+        if (alerts.length === 0) {
+            document.getElementById("vitalResult").innerHTML =
+                `<p class="green">✔ All vitals normal</p>`;
+        } else {
+            document.getElementById("vitalResult").innerHTML =
+                alerts.map(a => `<p class="red">${a}</p>`).join("");
+        }
+    }
+    catch (err) {
         document.getElementById("vitalResult").innerHTML =
-            `<p class="green">✔ All vitals normal</p>`;
-    } else {
-        document.getElementById("vitalResult").innerHTML =
-            data.alerts.map(a => `<p class="red">${a}</p>`).join("");
+            `<p class="red">ERROR: ${err.message}</p>`;
+        console.error(err);
     }
 }
 
+
 /* ------------------------------------------------------
    3) Full Risk Evaluation (Wound + Vitals)
+   Sends file as multipart/form-data and hr,temp,spo2 as Form fields
 ---------------------------------------------------------*/
 async function evaluateRisk() {
+
     let file = document.getElementById("riskImage").files[0];
+    if (!file) return alert("Please upload an image");
+
     let hr = document.getElementById("riskHr").value;
     let temp = document.getElementById("riskTemp").value;
     let spo2 = document.getElementById("riskSpo2").value;
@@ -107,19 +136,34 @@ async function evaluateRisk() {
     form.append("temp", temp);
     form.append("spo2", spo2);
 
-    let res = await fetch(`${BASE_URL}/risk/evaluate`, {
-        method: "POST",
-        body: form
-    });
+    try {
+        let res = await fetch(`${BASE_URL}/risk/evaluate`, {
+            method: "POST",
+            body: form
+        });
 
-    let data = await res.json();
+        if (!res.ok) throw new Error("API Error: " + res.status);
 
-    let risk = data.risk_score;
-    let color = risk < 0.35 ? "green" :
-                risk < 0.7 ? "yellow" :
-                "red";
+        let data = await res.json();
 
-    document.getElementById("riskOutput").innerHTML = `
-        <h3 class="${color}">Risk Score: ${risk.toFixed(2)}</h3>
-    `;
+        if (data.risk_score == null) {
+            throw new Error("Invalid response from server");
+        }
+
+        let risk = Number(data.risk_score);
+
+        let color = risk < 35 ? "green"
+                  : risk < 70 ? "yellow"
+                  : "red";
+
+        // Note: risk_score returned by backend is between 0-100
+        document.getElementById("riskOutput").innerHTML =
+            `<h3 class="${color}">Risk Score: ${risk.toFixed(2)}%</h3>
+             <p><strong>Level:</strong> ${data.risk_level}</p>
+             <p><strong>Reasons:</strong> ${data.explanation}</p>`;
+    } catch (err) {
+        document.getElementById("riskOutput").innerHTML =
+            `<p class="red">ERROR: ${err.message}</p>`;
+        console.error(err);
+    }
 }

@@ -19,7 +19,7 @@ class WoundModel:
         arr = np.expand_dims(arr, axis=0)
 
         pred = self.model.predict(arr)[0]
-        idx = np.argmax(pred)
+        idx = int(np.argmax(pred))
 
         return {
             "label": self.labels[idx],
